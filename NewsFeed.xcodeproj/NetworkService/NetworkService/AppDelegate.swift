@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  NewsFeed
+//  NetworkService
 //
-//  Created by Admin on 11/01/2019.
-//  Copyright © 2019 aadudyrev. All rights reserved.
+//  Created by Admin on 29/12/2018.
+//  Copyright © 2018 aadudyrev. All rights reserved.
 //
 
 import UIKit
@@ -12,16 +12,10 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let router = Router.shared
+
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        let frame = UIScreen.main.bounds
-        window = UIWindow(frame: frame)
-        
-        router.setRoot(for: window!)
-        
         return true
     }
 
