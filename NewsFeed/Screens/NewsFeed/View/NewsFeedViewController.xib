@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NewsFeedViewController" customModule="NewsFeed" customModuleProvider="target">
             <connections>
+                <outlet property="activityIndicator" destination="NiK-L7-aHR" id="QUd-cA-d2p"/>
                 <outlet property="tableView" destination="2oV-Qo-p19" id="QKG-1T-CHO"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -25,13 +26,21 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
+                <activityIndicatorView hidden="YES" opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="NiK-L7-aHR">
+                    <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="2oV-Qo-p19" secondAttribute="trailing" id="9Z6-xi-WIV"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="2oV-Qo-p19" secondAttribute="bottom" id="Pd7-s0-MuY"/>
                 <constraint firstItem="2oV-Qo-p19" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="RT4-Bu-iGz"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="NiK-L7-aHR" secondAttribute="trailing" id="Rxw-QZ-LXG"/>
+                <constraint firstItem="NiK-L7-aHR" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="YGr-Pf-Rg6"/>
                 <constraint firstItem="2oV-Qo-p19" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Ys6-zj-gxr"/>
+                <constraint firstItem="NiK-L7-aHR" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="gWb-fx-GSs"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="NiK-L7-aHR" secondAttribute="bottom" id="wFG-7E-EL3"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
         </view>

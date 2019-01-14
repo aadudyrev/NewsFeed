@@ -44,23 +44,6 @@ extension UIView: NibLoadable {
     }
 }
 
-extension UIView {
-    func dropShadow(shadowColor: UIColor = UIColor.black,
-                    fillColor: UIColor = UIColor.black,
-                    opacity: Float = 1,
-                    offset: CGSize = CGSize(width: 0, height: 0),
-                    radius: CGFloat = 10) -> CAShapeLayer {
-        
-        let shadowLayer = CAShapeLayer()
-        shadowLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: radius).cgPath
-        shadowLayer.fillColor = fillColor.cgColor
-        shadowLayer.shadowColor = shadowColor.cgColor
-        shadowLayer.shadowPath = shadowLayer.path
-        shadowLayer.shadowOffset = offset
-        shadowLayer.shadowOpacity = opacity
-        shadowLayer.shadowRadius = radius
-        layer.insertSublayer(shadowLayer, at: 0)
-        
-        return shadowLayer
-    }
+extension UIImageView {
+
 }

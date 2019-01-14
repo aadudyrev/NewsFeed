@@ -27,7 +27,7 @@
                     <collectionViewLayout key="collectionViewLayout" id="SMZ-hC-Iub" customClass="CategoriesLayout" customModule="NewsFeed" customModuleProvider="target"/>
                 </collectionView>
             </subviews>
-            <color key="backgroundColor" red="1" green="0.52910264510000005" blue="0.94761902139999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="t5G-nr-BWB" secondAttribute="bottom" id="It8-3K-Rcp"/>
                 <constraint firstItem="t5G-nr-BWB" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="Pg8-4f-BEf"/>

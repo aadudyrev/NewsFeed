@@ -8,13 +8,13 @@
 
 import Foundation
 
-enum NetworkManagerHelper {
+enum NewsEndPoint {
     case TopHeadlines
     case Everything
     case Sources
 }
 
-extension NetworkManagerHelper: EndPointProtocol {
+extension NewsEndPoint: EndPointProtocol {
     var httpMethod: HTTPMethod {
         return .get
     }
@@ -35,7 +35,7 @@ extension NetworkManagerHelper: EndPointProtocol {
     }
     
     var defaultParameters: KeyValues? {
-        return ["country" : "ru"]
+        return nil//["country" : "ru"]
     }
     
     var requaredParameters: Values? {

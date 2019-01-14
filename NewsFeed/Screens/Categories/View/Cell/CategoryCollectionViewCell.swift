@@ -16,9 +16,23 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        layer.cornerRadius = 10
-        layer.borderWidth = 1
-        layer.borderColor = UIColor.black.cgColor
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
+        
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 3, height: 3)
+        layer.shadowRadius = 5
+        layer.shadowOpacity = 1
+        layer.masksToBounds = false
+        
+        categoryTitleLabel.layer.cornerRadius = 10
+        categoryTitleLabel.layer.masksToBounds = true
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        categoryTitleLabel.text = nil
+        categoryImageView.image = nil
+    }
 }

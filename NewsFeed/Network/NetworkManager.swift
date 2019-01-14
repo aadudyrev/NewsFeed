@@ -11,9 +11,22 @@ import Foundation
 class NetworkManager {
     private let service = NetworkServiceManager<Articles, NewsError>()
     
-    func getNews(for category: NewsCategory?, complition: @escaping (Articles?, NewsError?) -> ()) {
-        let params = category != nil ? ["category" : category!.rawValue] : nil
-        service.sendRequest(to: NetworkManagerHelper.TopHeadlines, parameters: params, headers: nil) { (response) in
+    func getNews(with requestModel: NetworkRequestModel, complition: @escaping (Articles?, NewsError?) -> ()) {
+        var params = KeyValues()
+        
+        if let category = requestModel.category {
+            params["category"] = category.rawValue
+        }
+        
+        if let searchText = requestModel.searchText {
+            params["q"] = searchText
+        }
+        
+        if let country = requestModel.country {
+            params["country"] = country
+        }
+        
+        service.sendRequest(to: requestModel.endPoint, parameters: params, headers: nil) { (response) in
             
             switch response {
             case .Success(let articles):

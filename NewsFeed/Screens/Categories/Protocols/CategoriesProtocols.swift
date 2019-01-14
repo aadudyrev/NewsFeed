@@ -10,11 +10,12 @@ import Foundation
 
 protocol CategoriesInput {
     
-    func getCategoriesList() -> [CategoryModel]
+    var title: String? { get }
     
+    func getCategoriesList() -> [CategoryModel]
     func selectItem(at indexPath: IndexPath)
 }
 
-protocol CategoriesOutput {
+protocol CategoriesOutput: class {
     
 }

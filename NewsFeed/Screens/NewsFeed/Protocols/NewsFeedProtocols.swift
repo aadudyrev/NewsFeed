@@ -9,14 +9,20 @@
 import Foundation
 
 protocol NewsFeedInput {
+    
+    var newsList: [News] { get }
+    var title: String? { get }
+    var showSearchBar: Bool { get }
+    
     func getStarted()
     func update()
-    func getNews() -> [News]?
     func selectItem(at indexPath: IndexPath)
 }
 
-protocol NewsFeedOutput {
-    func showSearchBar()
+protocol NewsFeedOutput: class {
+    
+    var searchText: String? { get }
+    
     func showAlert(with title: String?, message: String?)
     func startRefresh()
     func endRefresh()

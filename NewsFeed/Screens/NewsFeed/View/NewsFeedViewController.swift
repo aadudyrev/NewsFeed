@@ -10,79 +10,95 @@ import UIKit
 
 class NewsFeedViewController: UIViewController {
     
-    lazy var presenter: NewsFeedInput = {
-        let pres = NewsFeedPresenter(output: self, category: category!)
-        return pres
-    }()
+    var presenter: NewsFeedInput?
     
-    private var newsList: [News]?
-    var category: CategoryModel?
-    
-    @IBOutlet var tableView: UITableView!
-    lazy var refreshControl: UIRefreshControl = {
-        let refreshC = UIRefreshControl(frame: .zero)
-        refreshC.addTarget(self, action: #selector(refreshControlChangedValue(_:)), for: .valueChanged)
-        return refreshC
-    }()
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    var searchController: UISearchController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configure(navigationItem: navigationItem)
         configure(tableView: tableView)
+        
+        presenter?.getStarted()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        presenter.getStarted()
     }
     
     // MARK: Actions
-    @objc func refreshControlChangedValue(_ sender: UIRefreshControl) {
-        presenter.update()
+    @objc func refreshAction(_ sender: UIRefreshControl) {
+        presenter?.update()
     }
     
-    func configure(tableView: UITableView) {
+    // MARK: Private Methods
+    private func configure(tableView: UITableView) {
         tableView.delegate = self
         tableView.dataSource = self
         
         tableView.register(NewsFeedTableViewCell.nib, forCellReuseIdentifier: NewsFeedTableViewCell.name)
-        
-        tableView.addSubview(refreshControl)
     }
+    
+    private func configure(navigationItem: UINavigationItem) {
+        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshAction(_:)))
+        navigationItem.rightBarButtonItem = refreshButton
 
+        navigationItem.title = presenter?.title
+        navigationItem.largeTitleDisplayMode = .always
+        
+        if presenter?.showSearchBar == true {
+            searchController = UISearchController(searchResultsController: nil)
+            configure(searchController: searchController)
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+    }
+    
+    private func configure(searchController: UISearchController?) {
+        definesPresentationContext = true
+        searchController?.searchBar.delegate = self
+        searchController?.dimsBackgroundDuringPresentation = false
+    }
 }
 
 extension NewsFeedViewController: UITableViewDelegate {
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        presenter?.selectItem(at: indexPath)
+    }
 }
 
 extension NewsFeedViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsList?.count ?? 0
+        return presenter?.newsList.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.name, for: indexPath) as! NewsFeedTableViewCell
         
-        if let news = newsList?[indexPath.row] {
+        if let news = presenter?.newsList[indexPath.row] {
             cell.titleLabel?.text = news.title
             cell.descriptionLabel?.text = news.description
         }
 
         return cell
     }
-    
+
 }
 
 extension NewsFeedViewController: NewsFeedOutput {
-    func showSearchBar() {
-        let searchBar = UISearchBar(frame: .zero)
-        searchBar.showsCancelButton = true
-        searchBar.placeholder = "search please"
-        navigationItem.titleView = searchBar
+    
+    var searchText: String? {
+        get {
+            return searchController?.searchBar.text
+        }
     }
     
     func showAlert(with title: String?, message: String?) {
@@ -107,20 +123,26 @@ extension NewsFeedViewController: NewsFeedOutput {
     
     func startRefresh() {
         DispatchQueue.main.async { [weak self] in
-            self?.refreshControl.beginRefreshing()
+            self?.activityIndicator.startAnimating()
         }
     }
     
     func endRefresh() {
         DispatchQueue.main.async { [weak self] in
-            self?.refreshControl.endRefreshing()
+            self?.activityIndicator.stopAnimating()
         }
     }
     
     func reloadData() {
         DispatchQueue.main.async { [weak self] in
-            self?.newsList = self?.presenter.getNews()
             self?.tableView.reloadData()
         }
+    }
+}
+
+extension NewsFeedViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        presenter?.update()
     }
 }
