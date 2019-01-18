@@ -46,7 +46,6 @@ extension CategoriesViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.name, for: indexPath) as! CategoryCollectionViewCell
         
         if let categoryModel = presenter?.getCategoriesList()[indexPath.row] {

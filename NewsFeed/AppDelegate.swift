@@ -22,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         router.setRoot(for: window!)
         
+        let fileManager = FileManager.default
+        print(fileManager.urls(for: .applicationDirectory, in: .userDomainMask).first!)
+        
         return true
     }
 

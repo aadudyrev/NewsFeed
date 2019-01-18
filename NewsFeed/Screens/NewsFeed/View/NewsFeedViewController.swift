@@ -20,14 +20,10 @@ class NewsFeedViewController: UIViewController {
         super.viewDidLoad()
 
         configure(navigationItem: navigationItem)
+        configure(searchController: searchController)
         configure(tableView: tableView)
         
         presenter?.getStarted()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
     }
     
     // MARK: Actions
@@ -35,7 +31,7 @@ class NewsFeedViewController: UIViewController {
         presenter?.update()
     }
     
-    // MARK: Private Methods
+    // MARK: Setup Views
     private func configure(tableView: UITableView) {
         tableView.delegate = self
         tableView.dataSource = self
@@ -51,15 +47,14 @@ class NewsFeedViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .always
         
         if presenter?.showSearchBar == true {
+            definesPresentationContext = true
             searchController = UISearchController(searchResultsController: nil)
-            configure(searchController: searchController)
             navigationItem.searchController = searchController
             navigationItem.hidesSearchBarWhenScrolling = false
         }
     }
     
     private func configure(searchController: UISearchController?) {
-        definesPresentationContext = true
         searchController?.searchBar.delegate = self
         searchController?.dimsBackgroundDuringPresentation = false
     }
@@ -84,6 +79,7 @@ extension NewsFeedViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.name, for: indexPath) as! NewsFeedTableViewCell
         
         if let news = presenter?.newsList[indexPath.row] {
+            cell.leftImageView?.setImage(fromURL: news.urlToImage)
             cell.titleLabel?.text = news.title
             cell.descriptionLabel?.text = news.description
         }
@@ -102,23 +98,9 @@ extension NewsFeedViewController: NewsFeedOutput {
     }
     
     func showAlert(with title: String?, message: String?) {
-        
-        if Thread.current.isMainThread == false {
-            DispatchQueue.main.async { [weak self] in
-                self?.showAlert(with: title, message: message)
-            }
-            return
+        DispatchQueue.main.async { [weak self] in
+            self?.presentAlert(with: title, and: message)
         }
-        
-        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let alertAction = UIAlertAction(title: "Ok", style: .destructive) { (action) in
-            alertVC.dismiss(animated: true, completion: nil)
-        }
-        
-        alertVC.addAction(alertAction)
-        
-        present(alertVC, animated: true)
     }
     
     func startRefresh() {

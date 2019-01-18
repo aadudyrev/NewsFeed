@@ -12,38 +12,41 @@ class NewsFeedPresenter {
     
     private let router = Router.shared
     private weak var output: NewsFeedOutput?
-    private let category: CategoryModel
-    private let networkManager = NetworkManager()    
-    private var articles: Articles? {
-        didSet {
-            output?.reloadData()
-        }
-    }
+    private let interactor: NewsFeedInteractorInput?
+    private let categoryModel: CategoryModel
+    private var news = [News]()
     
-    init(output: NewsFeedOutput, category: CategoryModel) {
+    init(output: NewsFeedOutput?, interactor: NewsFeedInteractorInput?, category: CategoryModel) {
         self.output = output
-        self.category = category
+        self.interactor = interactor
+        self.categoryModel = category
     }
     
+    private func createRequest() -> NewsFeedModels.Request {
+        let searchText = output?.searchText
+        let requestModel = NewsFeedModels.Request(category: categoryModel.category, searchText: searchText)
+        
+        return requestModel
+    }
 }
 
 extension NewsFeedPresenter: NewsFeedInput {
     
     var newsList: [News] {
         get {
-            return articles?.articles ?? [News]()
+            return news
         }
     }
     
     var title: String? {
         get {
-            return category.title
+            return categoryModel.title
         }
     }
     
     var showSearchBar: Bool {
         get {
-            return category.category == .search
+            return categoryModel.category == .search
         }
     }
     
@@ -54,33 +57,29 @@ extension NewsFeedPresenter: NewsFeedInput {
     func update() {
         output?.startRefresh()
         
-        let requestModel: NetworkRequestModel
-        
-        if category.category == .search {
-            let searchText = output?.searchText
-            requestModel = NetworkRequestModel.init(endPoint: .Everything, category: nil, searchText: searchText, country: nil)
-        } else {
-            requestModel = NetworkRequestModel.init(endPoint: .TopHeadlines, category: category.category, searchText: nil, country: nil)
-        }
-        
-        networkManager.getNews(with: requestModel) { [weak self] (articles, error) in
-            
-            self?.output?.endRefresh()
-            
-            if let newsError = error {
-                self?.output?.showAlert(with: newsError.status, message: newsError.message)
-                return
-            }
-            
-            if let newArticles = articles {
-                self?.articles = newArticles
-            }
-        }
+        let requestModel = createRequest()
+        interactor?.fetchNews(with: requestModel)
     }
     
     func selectItem(at indexPath: IndexPath) {
-        if let news = articles?.articles?[indexPath.row] {
-            router.showDetail(news: news)
+        let selectedNews = news[indexPath.row]
+        router.showDetail(news: selectedNews)
+    }
+}
+
+extension NewsFeedPresenter: NewsFeedInteractorOutput {
+    
+    func didReceive(response: NewsFeedModels.Response) {
+        output?.endRefresh()
+        
+        if let error = response.errorModel {
+            output?.showAlert(with: error.status, message: error.message)
+            return
+        }
+        
+        if let fetchedNews = response.news {
+            news = fetchedNews
+            output?.reloadData()
         }
     }
 }

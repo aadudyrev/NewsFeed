@@ -9,7 +9,6 @@
 import Foundation
 
 protocol NewsFeedInput {
-    
     var newsList: [News] { get }
     var title: String? { get }
     var showSearchBar: Bool { get }
@@ -20,11 +19,18 @@ protocol NewsFeedInput {
 }
 
 protocol NewsFeedOutput: class {
-    
     var searchText: String? { get }
     
     func showAlert(with title: String?, message: String?)
     func startRefresh()
     func endRefresh()
     func reloadData()
+}
+
+protocol NewsFeedInteractorInput {
+    func fetchNews(with newsFeedRequest: NewsFeedModels.Request)
+}
+
+protocol NewsFeedInteractorOutput: class {
+    func didReceive(response: NewsFeedModels.Response)
 }

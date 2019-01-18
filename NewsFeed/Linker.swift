@@ -23,8 +23,12 @@ class Linker {
     }
     
     func createNewsFeedViewController(with category: CategoryModel) -> NewsFeedViewController {
+        let networkManager = NetworkManager()
         let newsFeedVC = NewsFeedViewController.loadFromNib()
-        let presenter = NewsFeedPresenter(output: newsFeedVC, category: category)
+        let interactor = NewsFeedInteractor(networkManager: networkManager)
+        let presenter = NewsFeedPresenter(output: newsFeedVC, interactor: interactor, category: category)
+        
+        interactor.output = presenter
         newsFeedVC.presenter = presenter
         
         return newsFeedVC

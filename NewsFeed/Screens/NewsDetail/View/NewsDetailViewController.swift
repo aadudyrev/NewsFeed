@@ -38,6 +38,7 @@ class NewsDetailViewController: UIViewController {
         presenter?.openNews()
     }
     
+    // MARK: Setup Views
     private func configure(navigationItem: UINavigationItem) {
         navigationItem.largeTitleDisplayMode = .never
     }
@@ -53,15 +54,13 @@ extension NewsDetailViewController: NewsDetailOutput {
         
         let df = DateFormatter()
         df.dateStyle = .short
-        let dateString: String?
+        var dateString: String = "none"
         
         if let date = news.publishedAt {
             dateString = df.string(from: date)
-        } else {
-            dateString = "none"
         }
         
-        newsImageView.image = nil
+        newsImageView.setImage(fromURL: news.urlToImage)
         newsTitleLabel.text = news.title
         newsDescriptionLabel.text = news.description
         newsDateLabel.text = dateString

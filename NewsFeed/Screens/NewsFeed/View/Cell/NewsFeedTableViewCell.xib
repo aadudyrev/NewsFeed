@@ -31,11 +31,11 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NgJ-WW-8nv">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NgJ-WW-8nv">
                         <rect key="frame" x="16" y="11" width="90" height="90"/>
-                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="NgJ-WW-8nv" secondAttribute="height" multiplier="1:1" id="20D-CK-6fc"/>
+                            <constraint firstAttribute="height" secondItem="NgJ-WW-8nv" secondAttribute="width" multiplier="1:1" id="20D-CK-6fc"/>
                             <constraint firstAttribute="height" constant="90" id="pFc-cy-sqM"/>
                         </constraints>
                     </imageView>
@@ -56,6 +56,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="descriptionLabel" destination="N27-uf-wLB" id="woN-ff-qMc"/>
+                <outlet property="leftImageView" destination="NgJ-WW-8nv" id="Ggl-VY-GPR"/>
                 <outlet property="titleLabel" destination="nP1-PG-IBt" id="bun-PM-Hqt"/>
             </connections>
             <point key="canvasLocation" x="79.200000000000003" y="81.409295352323838"/>

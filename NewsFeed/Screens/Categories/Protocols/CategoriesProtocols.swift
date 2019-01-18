@@ -9,7 +9,6 @@
 import Foundation
 
 protocol CategoriesInput {
-    
     var title: String? { get }
     
     func getCategoriesList() -> [CategoryModel]

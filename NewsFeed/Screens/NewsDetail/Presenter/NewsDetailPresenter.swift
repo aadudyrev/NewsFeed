@@ -21,6 +21,7 @@ class NewsDetailPresenter {
 }
 
 extension NewsDetailPresenter: NewsDetailInput {
+    
     func getStarted() {
         output?.configure(with: currentNews)
     }
@@ -28,6 +29,4 @@ extension NewsDetailPresenter: NewsDetailInput {
     func openNews() {
         router.open(url: currentNews.url)
     }
-    
-    
 }
