@@ -11,6 +11,8 @@ import Foundation
 class Linker {
     static let shared = Linker()
     
+    private let localDataSource: LocalDataSourceLoader = CoreDataManager(completionClosure: {})
+    
     private init() {
         
     }
@@ -24,9 +26,9 @@ class Linker {
     
     func createNewsFeedViewController(with category: CategoryModel) -> NewsFeedViewController {
         let networkManager = NetworkManager()
-        let localDS = CoreDataManager(completionClosure: {})
+        let localDS = localDataSource
         let newsFeedVC = NewsFeedViewController.loadFromNib()
-        let interactor = NewsFeedInteractor(networkManager: networkManager, localDataSource: localDS)
+        let interactor = NewsFeedInteractor(remoteDataSource: networkManager, localDataSource: localDS)
         let presenter = NewsFeedPresenter(output: newsFeedVC, interactor: interactor, category: category)
         
         interactor.output = presenter
