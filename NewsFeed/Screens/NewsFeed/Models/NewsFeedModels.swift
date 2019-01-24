@@ -10,13 +10,29 @@ import Foundation
 
 enum NewsFeedModels {
     
-    struct Request {
-        let category: NewsCategory
-        let searchText: String?
+    enum Request {
+        
+        enum Fetch {
+            
+            struct Model {
+                let category: NewsCategory
+                let searchText: String?
+            }
+        }
+        
+        enum Save {
+            
+            struct Model {
+                let news: [News]
+            }
+        }
     }
     
-    struct Response {
-        let news: [News]?
-        let errorModel: NewsError?
+    enum Response {
+        
+        struct Model {
+            let newslist: [News]
+            let errorModel: NewsError?
+        }
     }
 }

@@ -28,9 +28,10 @@ protocol NewsFeedOutput: class {
 }
 
 protocol NewsFeedInteractorInput {
-    func fetchNews(with newsFeedRequest: NewsFeedModels.Request)
+    func fetchNews(with newsFeedRequest: NewsFeedModels.Request.Fetch.Model)
+    func addNews(with newsFeedRequest: NewsFeedModels.Request.Save.Model)
 }
 
 protocol NewsFeedInteractorOutput: class {
-    func didReceive(response: NewsFeedModels.Response)
+    func didReceive(response: NewsFeedModels.Response.Model)
 }

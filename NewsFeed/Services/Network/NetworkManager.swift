@@ -11,7 +11,10 @@ import Foundation
 class NetworkManager {
     private let service = NetworkServiceManager<Articles, NewsError>()
     
-    func getNews(with requestModel: NetworkModels.Request, complition: @escaping (NetworkModels.Response) -> ()) {
+}
+
+extension NetworkManager: RemoteDataSourceLoader {
+    func fetchArticles(with requestModel: NetworkModels.Request.Fetch.News.Model, complition: @escaping (NetworkModels.Response.News.Model) -> ()) {
         let params = getParams(from: requestModel)
         
         service.sendRequest(to: requestModel.endPoint, parameters: params, headers: nil) { (response) in
@@ -32,14 +35,16 @@ class NetworkManager {
                 newsError = errorModel
             }
             
-            let model = NetworkModels.Response(articles: artilcles, errorModel: newsError)
-            complition(model)
+            let responseModel = NetworkModels.Response.News.Model(articles: artilcles, errorModel: newsError)
+            complition(responseModel)
         }
     }
+    
+    
 }
 
 private extension NetworkManager {
-    func getParams(from requestModel: NetworkModels.Request) -> KeyValues {
+    func getParams(from requestModel: NetworkModels.Request.Fetch.News.Model) -> KeyValues {
         var params = KeyValues()
         
         if let category = requestModel.category {

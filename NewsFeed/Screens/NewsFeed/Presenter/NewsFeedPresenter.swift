@@ -22,9 +22,15 @@ class NewsFeedPresenter {
         self.categoryModel = category
     }
     
-    private func createRequest() -> NewsFeedModels.Request {
+    private func createFetchRequest() -> NewsFeedModels.Request.Fetch.Model {
         let searchText = output?.searchText
-        let requestModel = NewsFeedModels.Request(category: categoryModel.category, searchText: searchText)
+        let requestModel = NewsFeedModels.Request.Fetch.Model(category: categoryModel.category, searchText: searchText)
+        
+        return requestModel
+    }
+    
+    private func createSaveRequest(with news: [News]) -> NewsFeedModels.Request.Save.Model {
+        let requestModel = NewsFeedModels.Request.Save.Model(news: news)
         
         return requestModel
     }
@@ -57,19 +63,23 @@ extension NewsFeedPresenter: NewsFeedInput {
     func update() {
         output?.startRefresh()
         
-        let requestModel = createRequest()
+        let requestModel = createFetchRequest()
         interactor?.fetchNews(with: requestModel)
     }
     
     func selectItem(at indexPath: IndexPath) {
         let selectedNews = news[indexPath.row]
+        
+        let requestModel = createSaveRequest(with: [selectedNews])
+        interactor?.addNews(with: requestModel)
+        
         router.showDetail(news: selectedNews)
     }
 }
 
 extension NewsFeedPresenter: NewsFeedInteractorOutput {
     
-    func didReceive(response: NewsFeedModels.Response) {
+    func didReceive(response: NewsFeedModels.Response.Model) {
         output?.endRefresh()
         
         if let error = response.errorModel {
@@ -77,9 +87,7 @@ extension NewsFeedPresenter: NewsFeedInteractorOutput {
             return
         }
         
-        if let fetchedNews = response.news {
-            news = fetchedNews
-            output?.reloadData()
-        }
+        news = response.newslist
+        output?.reloadData()
     }
 }
