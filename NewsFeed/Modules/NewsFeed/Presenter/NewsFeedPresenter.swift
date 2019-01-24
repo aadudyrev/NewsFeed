@@ -13,6 +13,7 @@ class NewsFeedPresenter {
     private let router = Router.shared
     private weak var output: NewsFeedOutput?
     private let interactor: NewsFeedInteractorInput?
+    private let requestBuilder = NewsFeedPresenterRequestBuilder()
     private let categoryModel: CategoryModel
     private var news = [News]()
     
@@ -20,27 +21,6 @@ class NewsFeedPresenter {
         self.output = output
         self.interactor = interactor
         self.categoryModel = category
-    }
-    
-    private func createFetchRequest() -> NewsFeedModels.Request.Fetch.Model {
-        let searchText = output?.searchText
-        let requestModel = NewsFeedModels.Request.Fetch.Model(category: categoryModel.category, searchText: searchText)
-        return requestModel
-    }
-    
-    private func createSaveRequest(with news: [News]) -> NewsFeedModels.Request.Save.Model {
-        let requestModel = NewsFeedModels.Request.Save.Model(news: news)
-        return requestModel
-    }
-    
-    private func createRemoveRequest(with news: [News]) -> NewsFeedModels.Request.Remove.Model {
-        let requestModel = NewsFeedModels.Request.Remove.Model(news: news)
-        return requestModel
-    }
-    
-    private func createExistRequest(with news: News) -> NewsFeedModels.Request.Exist.Model {
-        let requestModel = NewsFeedModels.Request.Exist.Model(news: news)
-        return requestModel
     }
 }
 
@@ -71,7 +51,7 @@ extension NewsFeedPresenter: NewsFeedInput {
     func update() {
         output?.startRefresh()
         
-        let requestModel = createFetchRequest()
+        let requestModel = requestBuilder.createFetchRequest(with: output?.searchText, categoryModel: categoryModel)
         interactor?.fetchNews(with: requestModel)
     }
     
@@ -82,8 +62,8 @@ extension NewsFeedPresenter: NewsFeedInput {
     
     func actionsForObject(at indexPath: IndexPath) -> [NewsFeedAction] {
         let news = newsList[indexPath.row]
-        let request = createExistRequest(with: news)
-        if interactor?.existInLocalStorage(request) == true {
+        let request = requestBuilder.createExistRequest(with: news)
+        if interactor?.alreadyExist(request) == true {
             return [.remove]
         }
         return [.add]
@@ -94,10 +74,10 @@ extension NewsFeedPresenter: NewsFeedInput {
         
         switch action {
         case .add:
-            let requestModel = createSaveRequest(with: [newsForAction])
+            let requestModel = requestBuilder.createSaveRequest(with: [newsForAction])
             interactor?.addNews(with: requestModel)
         case .remove:
-            let requestModel = createRemoveRequest(with: [newsForAction])
+            let requestModel = requestBuilder.createRemoveRequest(with: [newsForAction])
             interactor?.removeNews(with: requestModel)
             
             if categoryModel.category == .saved {
@@ -110,7 +90,7 @@ extension NewsFeedPresenter: NewsFeedInput {
 
 extension NewsFeedPresenter: NewsFeedInteractorOutput {
     
-    func didReceive(response: NewsFeedModels.Response.Model) {
+    func didReceive(response: NewsFeedModel.Response.Model) {
         output?.endRefresh()
         
         if let error = response.errorModel {

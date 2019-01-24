@@ -8,6 +8,9 @@
 
 import Foundation
 
+
+
+
 enum NewsFeedAction {
     case remove
     case add
@@ -36,13 +39,16 @@ protocol NewsFeedOutput: class {
     func removeObject(at indexPath: IndexPath)
 }
 
+
+
+
 protocol NewsFeedInteractorInput {
-    func fetchNews(with newsFeedRequest: NewsFeedModels.Request.Fetch.Model)
-    func addNews(with newsFeedRequest: NewsFeedModels.Request.Save.Model)
-    func removeNews(with newsFeedRequest: NewsFeedModels.Request.Remove.Model)
-    func existInLocalStorage(_ request: NewsFeedModels.Request.Exist.Model) -> Bool
+    func fetchNews(with newsFeedRequest: NewsFeedModel.Request.Fetch.Model)
+    func addNews(with newsFeedRequest: NewsFeedModel.Request.Save.Model)
+    func removeNews(with newsFeedRequest: NewsFeedModel.Request.Remove.Model)
+    func alreadyExist(_ request: NewsFeedModel.Request.Exist.Model) -> Bool
 }
 
 protocol NewsFeedInteractorOutput: class {
-    func didReceive(response: NewsFeedModels.Response.Model)
+    func didReceive(response: NewsFeedModel.Response.Model)
 }

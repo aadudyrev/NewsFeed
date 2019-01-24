@@ -49,6 +49,4 @@ extension RemoteNewsEndPoint: EndPointProtocol {
     var requaredHeaders: Values? {
         return ["X-Api-Key"]
     }
-    
-    
 }

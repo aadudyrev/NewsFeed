@@ -21,30 +21,32 @@ extension UIImageView {
 
 private extension UIImageView {
     
-    func getActivitiIndicator() -> UIActivityIndicatorView {
-        let activitiIndicators = subviews.filter{ $0 is UIActivityIndicatorView }
+    var activityIndicator: UIActivityIndicatorView {
         
-        if let actInd = activitiIndicators.first as? UIActivityIndicatorView {
+        get {
+            let actInds = subviews.filter{ $0 is UIActivityIndicatorView }
+            
+            if let actInd = actInds.first as? UIActivityIndicatorView {
+                return actInd
+            }
+            
+            let actInd = UIActivityIndicatorView(frame: self.bounds)
+            actInd.style = .whiteLarge
+            actInd.backgroundColor = .black
+            actInd.alpha = 0.25
+            actInd.hidesWhenStopped = true
+            addSubview(actInd)
+            
             return actInd
         }
-        
-        let actInd = UIActivityIndicatorView(frame: self.bounds)
-        actInd.style = .whiteLarge
-        actInd.backgroundColor = .black
-        actInd.alpha = 0.25
-        actInd.hidesWhenStopped = true
-        addSubview(actInd)
-        
-        return actInd
     }
     
     func showActivitiIndicator(_ show: Bool) {
-        let actInd = getActivitiIndicator()
         switch show {
         case true:
-            actInd.startAnimating()
+            activityIndicator.startAnimating()
         case false:
-            actInd.stopAnimating()
+            activityIndicator.stopAnimating()
         }
     }
 }

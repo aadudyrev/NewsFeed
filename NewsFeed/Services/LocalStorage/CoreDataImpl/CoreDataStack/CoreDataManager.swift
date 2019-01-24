@@ -11,14 +11,15 @@ import CoreData
 
 class CoreDataManager {
     
-    var persistentContainer: NSPersistentContainer
-    var mainContext: NSManagedObjectContext {
+    private var persistentContainer: NSPersistentContainer
+    private var mainContext: NSManagedObjectContext {
+        
         get {
             return persistentContainer.viewContext
         }
     }
     
-    let converter = CoreDataConverter()
+    private let converter = CoreDataConverter()
     
     init(completionClosure: @escaping () -> ()) {
         persistentContainer = NSPersistentContainer(name: "NewsFeed")

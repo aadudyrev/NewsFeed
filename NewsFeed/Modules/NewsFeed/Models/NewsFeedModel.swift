@@ -1,5 +1,5 @@
 //
-//  NewsFeedModels.swift
+//  NewsFeedModel.swift
 //  NewsFeed
 //
 //  Created by Admin on 18/01/2019.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum NewsFeedModels {
+enum NewsFeedModel {
     
     enum Request {
         
